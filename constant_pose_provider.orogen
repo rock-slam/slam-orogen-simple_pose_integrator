@@ -1,0 +1,23 @@
+name "constant_pose_provider"
+
+import_types_from "base"
+
+task_context "Task" do
+    needs_configuration
+
+    property "body_in_odometry_period", "double", 0.01
+
+    input_port "pose_samples_in", "/base/samples/RigidBodyState"
+
+    output_port "pose_samples", "/base/samples/RigidBodyState"
+
+    transformer do
+        max_latency( 0.2 )
+
+        transformation("body", "odometry")
+
+        align_port("pose_samples_in")
+    end
+
+    port_driven
+end

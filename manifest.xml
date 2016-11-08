@@ -1,0 +1,12 @@
+<package>
+  <description brief="Provides a constant pose update of an irregular or low frequent input pose (e.g. from a slam) given a high frequent delta pose (e.g. from an odometry)">
+  
+  </description>
+  <author>Sascha Arnold/sascha.arnold@dfki.de</author>
+  <license></license>
+  <url>http://</url>
+  <logo>http://</logo>
+  <depend package="base/cmake" />
+  <depend package="base/types" />
+  <depend package="base/logging" />
+</package>
