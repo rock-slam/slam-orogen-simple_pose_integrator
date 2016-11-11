@@ -26,6 +26,7 @@ void Task::pose_samples_inTransformerCallback(const base::Time &ts, const ::base
     base::Affine3d new_body_in_odomerty;
     if(_body2odometry.get(ts, new_body_in_odomerty, true))
     {
+        // save odometry pose at the time of the last received pose
         body_in_odomerty = new_body_in_odomerty;
         pose_sample = pose_samples_in_sample;
         _pose_samples.write(pose_samples_in_sample);
@@ -48,6 +49,7 @@ void Task::constant_pose_callback(const base::Time& ts, const base::Time& timest
         return;
     }
 
+    // apply newest odometry delta to last received pose
     base::Affine3d current_body_in_odomerty;
     if(body2odometry_fast.get(timestamp, current_body_in_odomerty))
     {
@@ -100,8 +102,10 @@ void Task::updateHook()
 {
     RTT::TaskContext::updateHook();
 
+    // read new samples
     pullPorts();
 
+    // read new dynamic transformations
     base::samples::RigidBodyState dynamicTransform;
     while(_dynamic_transformations.read(dynamicTransform, false) == RTT::NewData)
     {
@@ -110,17 +114,18 @@ void Task::updateHook()
         fast_transformer.pushData(constant_pose_idx, dynamicTransform.time, dynamicTransform.time);
     }
 
-    const base::Time statusPeriod( base::Time::fromSeconds( _transformer_status_period.value() ) );
+    // write out transfromer status
     do
     {
         const base::Time curTime(base::Time::now());
         if( curTime > _nextStatusTime )
         {
-            _nextStatusTime = curTime + statusPeriod;
+            _nextStatusTime = curTime + base::Time::fromSeconds( _transformer_status_period.value() );
             _transformer_stream_aligner_status.write(_transformer.getStatus());
             _transformer_status.write(_transformer.getTransformerStatus());
         }
     }
+    // step sample aligned and not aligned transfromer
     while(_transformer.step());
     while(fast_transformer.step());
 }

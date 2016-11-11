@@ -1,5 +1,5 @@
 <package>
-  <description brief="Provides a constant pose update of an irregular or low frequent input pose (e.g. from a slam) given a high frequent delta pose (e.g. from an odometry)">
+  <description brief="Provides a fast pose update of an irregular or low frequent input pose (e.g. from a slam) given a high frequent delta pose (e.g. from an odometry)">
   
   </description>
   <author>Sascha Arnold/sascha.arnold@dfki.de</author>
