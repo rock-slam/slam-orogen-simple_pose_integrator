@@ -1,4 +1,4 @@
-name "constant_pose_provider"
+name "simple_pose_integrator"
 
 import_types_from "base"
 

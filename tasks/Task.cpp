@@ -3,7 +3,7 @@
 #include "Task.hpp"
 #include <base-logging/Logging.hpp>
 
-using namespace constant_pose_provider;
+using namespace simple_pose_integrator;
 
 Task::Task(std::string const& name)
     : TaskBase(name)
@@ -37,7 +37,7 @@ void Task::pose_samples_inTransformerCallback(const base::Time &ts, const ::base
     }
 }
 
-void Task::constant_pose_callback(const base::Time& ts, const base::Time& timestamp)
+void Task::fast_pose_callback(const base::Time& ts, const base::Time& timestamp)
 {
     // return on old data
     if(timestamp <= pose_sample.time)
@@ -84,9 +84,9 @@ bool Task::configureHook()
     fast_transformer.setFrameMapping("body", _body_frame);
     fast_transformer.setFrameMapping("odometry", _odometry_frame);
 
-    constant_pose_idx = fast_transformer.registerDataStream< ::base::Time >(
+    fast_pose_idx = fast_transformer.registerDataStream< ::base::Time >(
                             base::Time::fromSeconds(_body_in_odometry_period.value()),
-                            boost::bind( &constant_pose_provider::Task::constant_pose_callback, this, _1, _2), 1, "constant_pose");
+                            boost::bind( &simple_pose_integrator::Task::fast_pose_callback, this, _1, _2), 1, "fast_pose");
 
     pose_sample.invalidate();
 
@@ -111,7 +111,7 @@ void Task::updateHook()
     {
         _transformer.pushDynamicTransformation(dynamicTransform);
         fast_transformer.pushDynamicTransformation(dynamicTransform);
-        fast_transformer.pushData(constant_pose_idx, dynamicTransform.time, dynamicTransform.time);
+        fast_transformer.pushData(fast_pose_idx, dynamicTransform.time, dynamicTransform.time);
     }
 
     // write out transfromer status
@@ -142,5 +142,5 @@ void Task::cleanupHook()
     TaskBase::cleanupHook();
 
     fast_transformer.clear();
-    fast_transformer.unregisterDataStream(constant_pose_idx);
+    fast_transformer.unregisterDataStream(fast_pose_idx);
 }

@@ -1,11 +1,11 @@
 /* Generated from orogen/lib/orogen/templates/tasks/Task.hpp */
 
-#ifndef CONSTANT_POSE_PROVIDER_TASK_TASK_HPP
-#define CONSTANT_POSE_PROVIDER_TASK_TASK_HPP
+#ifndef SIMPLE_POSE_INTEGRATOR_TASK_TASK_HPP
+#define SIMPLE_POSE_INTEGRATOR_TASK_TASK_HPP
 
-#include "constant_pose_provider/TaskBase.hpp"
+#include "simple_pose_integrator/TaskBase.hpp"
 
-namespace constant_pose_provider{
+namespace simple_pose_integrator{
 
     /*! \class Task
      * \brief The task context provides and requires services. It uses an ExecutionEngine to perform its functions.
@@ -16,7 +16,7 @@ namespace constant_pose_provider{
      * The name of a TaskContext is primarily defined via:
      \verbatim
      deployment 'deployment_name'
-         task('custom_task_name','constant_pose_provider::Task')
+         task('custom_task_name','simple_pose_integrator::Task')
      end
      \endverbatim
      *  It can be dynamically adapted when the deployment is called with a prefix argument.
@@ -28,18 +28,18 @@ namespace constant_pose_provider{
         base::Affine3d body_in_odomerty;
         base::samples::RigidBodyState pose_sample;
         transformer::Transformer fast_transformer;
-        int constant_pose_idx;
+        int fast_pose_idx;
         transformer::Transformation& body2odometry_fast;
 
         virtual void pose_samples_inTransformerCallback(const base::Time &ts, const ::base::samples::RigidBodyState &pose_samples_in_sample);
-        void constant_pose_callback(const base::Time &ts, const ::base::Time &timestamp);
+        void fast_pose_callback(const base::Time &ts, const ::base::Time &timestamp);
 
     public:
         /** TaskContext constructor for Task
          * \param name Name of the task. This name needs to be unique to make it identifiable via nameservices.
          * \param initial_state The initial TaskState of the TaskContext. Default is Stopped state.
          */
-        Task(std::string const& name = "constant_pose_provider::Task");
+        Task(std::string const& name = "simple_pose_integrator::Task");
 
         /** TaskContext constructor for Task
          * \param name Name of the task. This name needs to be unique to make it identifiable for nameservices.
