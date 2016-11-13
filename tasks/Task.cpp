@@ -29,7 +29,6 @@ void Task::pose_samples_inTransformerCallback(const base::Time &ts, const ::base
         // save odometry pose at the time of the last received pose
         body_in_odomerty = new_body_in_odomerty;
         pose_sample = pose_samples_in_sample;
-        _pose_samples.write(pose_samples_in_sample);
     }
     else
     {
