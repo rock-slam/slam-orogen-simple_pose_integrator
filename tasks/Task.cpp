@@ -75,7 +75,7 @@ bool Task::configureHook()
         return false;
 
     fast_transformer.clear();
-    fast_transformer.setTimeout( base::Time::fromSeconds( _transformer_max_latency.value()) );
+    fast_transformer.setTimeout( base::Time::fromSeconds(0.0) );
 
     std::vector<base::samples::RigidBodyState> const& staticTransforms = _static_transformations.value();
      for (size_t i = 0; i < staticTransforms.size(); ++i)
