@@ -1,5 +1,6 @@
 name "simple_pose_integrator"
 
+using_library 'transformer'
 import_types_from "base"
 
 # Provides a faster pose update for an irregular or low frequent input pose
