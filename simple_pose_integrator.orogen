@@ -10,6 +10,7 @@ task_context "Task" do
 
     property "body_in_odometry_period", "double", 0.01
 
+    # low frequency data
     input_port "pose_samples_in", "/base/samples/RigidBodyState"
 
     output_port "pose_samples", "/base/samples/RigidBodyState"
@@ -21,6 +22,24 @@ task_context "Task" do
 
         align_port("pose_samples_in")
     end
+
+    port_driven
+end
+
+# non transformer version for high frequency drift compensation
+# just multiplies the latest drift with the high frequency pose update and 
+# frames: drift source is odometry drift target is map output will be 
+task_context "PoseMultiplier" do 
+    needs_configuration
+
+    # set the frame names of the output
+    property "source_frame", "/std/string"
+    property "target_frame", "/std/string"
+
+    input_port "drift", "/base/samples/RigidBodyState"
+    input_port "pose_updates", "/base/samples/RigidBodyState"
+
+    output_port "pose_samples", "/base/samples/RigidBodyState"
 
     port_driven
 end
