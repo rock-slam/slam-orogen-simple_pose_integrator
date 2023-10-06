@@ -37,8 +37,8 @@ void PoseMultiplier::updateHook()
 {
     PoseMultiplierBase::updateHook();
 
-    while (_drift.read(drift) == RTT::NewData) {}
-    while (_pose_updates.read(pose)) {
+    _drift.readNewest(drift);
+    if (_pose_updates.readNewest(pose) == RTT::NewData) {
 
         // if (drift.sourceFrame != pose.targetFrame) {
         //     throw std::runtime_error("input frames have to match for a valid result");
